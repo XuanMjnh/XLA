@@ -1,0 +1,26 @@
+[
+  {
+    "file": "jfreechart-1.5.6.jar",
+    "source": "https://sites.imagej.net/Fiji/jars/jfreechart-1.5.6.jar-20260716221137",
+    "sha256": "be7ae6310ca005ac98eceb74fa514af88cad098c808845786f762ca08a5b4bb3",
+    "bytes": 1652288
+  },
+  {
+    "file": "ij-1.54p.jar",
+    "source": "https://sites.imagej.net/Fiji/jars/ij-1.54p.jar-20250219110715",
+    "sha256": "2e1a09961dfb41cee66ddc821b2577a41a072566ce45a49bae69267099741e20",
+    "bytes": 2586953
+  },
+  {
+    "file": "jcommon-1.0.24.jar",
+    "source": "https://sites.imagej.net/Fiji/jars/jcommon-1.0.24.jar-20170530201750",
+    "sha256": "13e2596044935f76694cce65a22d1df908907ddcba0da2b49ff030930262d417",
+    "bytes": 330507
+  },
+  {
+    "file": "Directionality_-2.3.0.jar",
+    "source": "https://sites.imagej.net/Fiji/plugins/Directionality_-2.3.0.jar-20181204141527",
+    "sha256": "81f916d6e21746c947240a93e1b788e27a6774a8033e439848a142ce3ca71cae",
+    "bytes": 25076
+  }
+]

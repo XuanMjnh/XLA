@@ -1,0 +1,13 @@
+{
+  "python": "3.12.14",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+  "tests": 55,
+  "test_status": "passed",
+  "qt": "offscreen",
+  "reference_plugin": "Directionality 2.3.0",
+  "imagej": "1.54p",
+  "reference_images": 15,
+  "windows_execution": "not_tested",
+  "macos_execution": "not_tested",
+  "date": "2026-11-02"
+}

@@ -1,0 +1,909 @@
+{
+  "design": {
+    "angles_deg": [
+      0,
+      15,
+      30,
+      45,
+      60,
+      75,
+      90,
+      105,
+      120,
+      135,
+      150,
+      165
+    ],
+    "noise_sigmas": [
+      0.0,
+      0.05,
+      0.15,
+      0.3
+    ],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "shape": [
+      256,
+      256
+    ],
+    "period_px": 16,
+    "amplitude": 0.35,
+    "offset": 0.5,
+    "phase_rad": 0.37,
+    "quantization": "clip [0,1], round to uint8 before analysis",
+    "accuracy_images": 240,
+    "sigma_ablation_images": 144,
+    "bins_ablation_images": 144,
+    "hann_ablation_images": 72
+  },
+  "config": {
+    "bins": 180,
+    "gaussian_sigma": 1.0,
+    "sobel_size": 5,
+    "gradient_threshold": 0.05,
+    "gradient_weight": 2,
+    "histogram_sigma_deg": 2.0,
+    "min_frequency": 0.02,
+    "max_frequency": 0.45,
+    "use_hann": true,
+    "max_size": 2048
+  },
+  "accuracy": [
+    {
+      "noise_sigma": 0.0,
+      "n_images": 60,
+      "spatial_mae": 0.09451410376785792,
+      "spatial_error_sd": 0.06739577968242703,
+      "spatial_max_error": 0.14225107758866784,
+      "spatial_mean_R": 0.9975111346268579,
+      "fourier_mae": 0.06775189117020138,
+      "fourier_error_sd": 0.08873891656973336,
+      "fourier_max_error": 0.19204685224411833,
+      "fourier_mean_R": 0.9948649812043212
+    },
+    {
+      "noise_sigma": 0.05,
+      "n_images": 60,
+      "spatial_mae": 0.10791892092315128,
+      "spatial_error_sd": 0.06427347669877038,
+      "spatial_max_error": 0.20575158205224398,
+      "spatial_mean_R": 0.990008391674652,
+      "fourier_mae": 0.06764530492021047,
+      "fourier_error_sd": 0.08793242234937737,
+      "fourier_max_error": 0.19781148407624016,
+      "fourier_mean_R": 0.9912697165100217
+    },
+    {
+      "noise_sigma": 0.15,
+      "n_images": 60,
+      "spatial_mae": 0.20019560034798733,
+      "spatial_error_sd": 0.1423350021481992,
+      "spatial_max_error": 0.6322980639335753,
+      "spatial_mean_R": 0.9371497785360082,
+      "fourier_mae": 0.06807470410315138,
+      "fourier_error_sd": 0.08600714715802461,
+      "fourier_max_error": 0.20892299997420594,
+      "fourier_mean_R": 0.9652376869208806
+    },
+    {
+      "noise_sigma": 0.3,
+      "n_images": 60,
+      "spatial_mae": 0.9572969570824588,
+      "spatial_error_sd": 0.7175218609071912,
+      "spatial_max_error": 2.9677401431625583,
+      "spatial_mean_R": 0.7915596884001496,
+      "fourier_mae": 0.0703063101689184,
+      "fourier_error_sd": 0.08292796484114616,
+      "fourier_max_error": 0.22693664046717288,
+      "fourier_mean_R": 0.8850514484972966
+    }
+  ],
+  "sigma_ablation": [
+    {
+      "sigma": 0.0,
+      "n_images": 36,
+      "spatial_mae": 0.7818189124902106,
+      "spatial_error_sd": 0.5618522200371446,
+      "spatial_max_error": 2.28290160691526,
+      "spatial_mean_R": 0.8186022220402216,
+      "fourier_mae": 0.06899387497508552,
+      "fourier_error_sd": 0.08796569875715497,
+      "fourier_max_error": 0.2091481419736283,
+      "fourier_mean_R": 0.8173649566087207
+    },
+    {
+      "sigma": 0.5,
+      "n_images": 36,
+      "spatial_mae": 0.39694675781254596,
+      "spatial_error_sd": 0.34657774320800433,
+      "spatial_max_error": 1.186527752838046,
+      "spatial_mean_R": 0.8603941783703859,
+      "fourier_mae": 0.06897131853482069,
+      "fourier_error_sd": 0.08816055769002712,
+      "fourier_max_error": 0.20917135516781116,
+      "fourier_mean_R": 0.8903745950590817
+    },
+    {
+      "sigma": 1.0,
+      "n_images": 36,
+      "spatial_mae": 0.21169744409413363,
+      "spatial_error_sd": 0.1599683146360362,
+      "spatial_max_error": 0.6322980639335753,
+      "spatial_mean_R": 0.9367824813465825,
+      "fourier_mae": 0.06895598205446953,
+      "fourier_error_sd": 0.08820331751472787,
+      "fourier_max_error": 0.20892299997420594,
+      "fourier_mean_R": 0.9650737491432684
+    },
+    {
+      "sigma": 2.0,
+      "n_images": 36,
+      "spatial_mae": 0.12398944628107048,
+      "spatial_error_sd": 0.08637909200732155,
+      "spatial_max_error": 0.31165721324711626,
+      "spatial_mean_R": 0.982129442174235,
+      "fourier_mae": 0.06895552089957294,
+      "fourier_error_sd": 0.08818386823339684,
+      "fourier_max_error": 0.20876740488023415,
+      "fourier_mean_R": 0.9836968134656286
+    }
+  ],
+  "bins_ablation": [
+    {
+      "bins": 36,
+      "n_images": 36,
+      "spatial_mae": 0.180948841418042,
+      "spatial_error_sd": 0.12875038378102985,
+      "spatial_max_error": 0.5253070100815052,
+      "spatial_mean_R": 0.9356667119014936,
+      "fourier_mae": 0.48374158118215504,
+      "fourier_error_sd": 0.08900071116507217,
+      "fourier_max_error": 0.6135285941973336,
+      "fourier_mean_R": 0.9635078336538585
+    },
+    {
+      "bins": 90,
+      "n_images": 36,
+      "spatial_mae": 0.2015413000295558,
+      "spatial_error_sd": 0.1177996328539852,
+      "spatial_max_error": 0.4272558044656023,
+      "spatial_mean_R": 0.9365323173586021,
+      "fourier_mae": 0.15319696022095444,
+      "fourier_error_sd": 0.08795827685287423,
+      "fourier_max_error": 0.30179183531090814,
+      "fourier_mean_R": 0.9645751613927884
+    },
+    {
+      "bins": 180,
+      "n_images": 36,
+      "spatial_mae": 0.21172954092013618,
+      "spatial_error_sd": 0.125049589065305,
+      "spatial_max_error": 0.4311158800903172,
+      "spatial_mean_R": 0.9368182868406516,
+      "fourier_mae": 0.12921704769995224,
+      "fourier_error_sd": 0.12285758421816502,
+      "fourier_max_error": 0.384372090941568,
+      "fourier_mean_R": 0.9648973917281053
+    },
+    {
+      "bins": 360,
+      "n_images": 36,
+      "spatial_mae": 0.2154361860991519,
+      "spatial_error_sd": 0.1297204721626041,
+      "spatial_max_error": 0.4363692744667418,
+      "spatial_mean_R": 0.936890325424383,
+      "fourier_mae": 0.14272728251739628,
+      "fourier_error_sd": 0.13759525613394963,
+      "fourier_max_error": 0.40623695000851967,
+      "fourier_mean_R": 0.9649761737208906
+    }
+  ],
+  "hann_ablation": [
+    {
+      "hann": 0,
+      "n_images": 36,
+      "spatial_mae": 0.21172954092013618,
+      "spatial_error_sd": 0.125049589065305,
+      "spatial_max_error": 0.4311158800903172,
+      "spatial_mean_R": 0.9368182868406516,
+      "fourier_mae": 0.3943685112873882,
+      "fourier_error_sd": 0.37954925990705934,
+      "fourier_max_error": 0.995744644241455,
+      "fourier_mean_R": 0.9464564898175052
+    },
+    {
+      "hann": 1,
+      "n_images": 36,
+      "spatial_mae": 0.21172954092013618,
+      "spatial_error_sd": 0.125049589065305,
+      "spatial_max_error": 0.4311158800903172,
+      "spatial_mean_R": 0.9368182868406516,
+      "fourier_mae": 0.12921704769995224,
+      "fourier_error_sd": 0.12285758421816502,
+      "fourier_max_error": 0.384372090941568,
+      "fourier_mean_R": 0.9648973917281053
+    }
+  ],
+  "runtime": [
+    {
+      "size": 128,
+      "n_runs": 5,
+      "median_ms": 3.401611999834131,
+      "min_ms": 3.1735009997646557,
+      "max_ms": 3.4846489998017205
+    },
+    {
+      "size": 256,
+      "n_runs": 5,
+      "median_ms": 11.070278999795846,
+      "min_ms": 10.175289000471821,
+      "max_ms": 11.514226000144845
+    },
+    {
+      "size": 512,
+      "n_runs": 5,
+      "median_ms": 57.96437899971352,
+      "min_ms": 56.540149000284146,
+      "max_ms": 59.70019200049137
+    },
+    {
+      "size": 1024,
+      "n_runs": 5,
+      "median_ms": 232.55942499963567,
+      "min_ms": 231.40026600049168,
+      "max_ms": 243.61291300010635
+    }
+  ],
+  "cases": {
+    "stripes_030.png": {
+      "schema_version": "1.0",
+      "angle_convention": "structure angle; 0=horizontal; counter-clockwise; modulo 180 degrees",
+      "config": {
+        "bins": 180,
+        "gaussian_sigma": 1.0,
+        "sobel_size": 5,
+        "gradient_threshold": 0.05,
+        "gradient_weight": 2,
+        "histogram_sigma_deg": 2.0,
+        "min_frequency": 0.02,
+        "max_frequency": 0.45,
+        "use_hann": true,
+        "max_size": 2048
+      },
+      "metadata": {
+        "original_shape_hw": [
+          256,
+          256
+        ],
+        "cropped_shape_hw": [
+          256,
+          256
+        ],
+        "analysis_shape_hw": [
+          256,
+          256
+        ],
+        "resize_scale": 1.0,
+        "roi_xywh": null,
+        "input_min": 38.0,
+        "input_max": 217.0,
+        "normalization": "per-image min-max to [0,1]",
+        "pixel_spacing_assumption": "square pixels; frequency in cycles/analysis-pixel",
+        "spatial_fourier_peak_difference_deg": 0.15310355466573355,
+        "excluded_border_pixels": 5,
+        "valid_gradient_fraction": 0.8947601318359375,
+        "frequency_bin_count": 41600,
+        "fourier_band_energy": 63871900.07903106
+      },
+      "spatial": {
+        "has_signal": true,
+        "peak_angle_deg": 29.85814038715536,
+        "mean_angle_deg": 29.83955612160117,
+        "resultant_length": 0.9974834574447848,
+        "entropy_normalized": 0.4099333435196381,
+        "peak_mass_pm10deg": 0.999999999194462,
+        "peaks_deg": [
+          29.85814038715536
+        ],
+        "interpretation": "strong_single_axis_component"
+      },
+      "fourier": {
+        "has_signal": true,
+        "peak_angle_deg": 30.011243941821096,
+        "mean_angle_deg": 30.00001751403907,
+        "resultant_length": 0.9948302619908889,
+        "entropy_normalized": 0.47931683151442356,
+        "peak_mass_pm10deg": 0.999529759151848,
+        "peaks_deg": [
+          30.011243941821096
+        ],
+        "interpretation": "strong_single_axis_component"
+      },
+      "warnings": []
+    },
+    "stripes_030_noise015.png": {
+      "schema_version": "1.0",
+      "angle_convention": "structure angle; 0=horizontal; counter-clockwise; modulo 180 degrees",
+      "config": {
+        "bins": 180,
+        "gaussian_sigma": 1.0,
+        "sobel_size": 5,
+        "gradient_threshold": 0.05,
+        "gradient_weight": 2,
+        "histogram_sigma_deg": 2.0,
+        "min_frequency": 0.02,
+        "max_frequency": 0.45,
+        "use_hann": true,
+        "max_size": 2048
+      },
+      "metadata": {
+        "original_shape_hw": [
+          256,
+          256
+        ],
+        "cropped_shape_hw": [
+          256,
+          256
+        ],
+        "analysis_shape_hw": [
+          256,
+          256
+        ],
+        "resize_scale": 1.0,
+        "roi_xywh": null,
+        "input_min": 0.0,
+        "input_max": 255.0,
+        "normalization": "per-image min-max to [0,1]",
+        "pixel_spacing_assumption": "square pixels; frequency in cycles/analysis-pixel",
+        "spatial_fourier_peak_difference_deg": 0.2603083852134631,
+        "excluded_border_pixels": 5,
+        "valid_gradient_fraction": 0.905975341796875,
+        "frequency_bin_count": 41600,
+        "fourier_band_energy": 30735902.722792536
+      },
+      "spatial": {
+        "has_signal": true,
+        "peak_angle_deg": 29.746707532064395,
+        "mean_angle_deg": 29.836290186195512,
+        "resultant_length": 0.9377298139546185,
+        "entropy_normalized": 0.7144713271577023,
+        "peak_mass_pm10deg": 0.727824790635709,
+        "peaks_deg": [
+          29.746707532064395
+        ],
+        "interpretation": "strong_single_axis_component"
+      },
+      "fourier": {
+        "has_signal": true,
+        "peak_angle_deg": 30.007015917277855,
+        "mean_angle_deg": 29.993962159787564,
+        "resultant_length": 0.9637423065035892,
+        "entropy_normalized": 0.5182874849381555,
+        "peak_mass_pm10deg": 0.9717312503978699,
+        "peaks_deg": [
+          30.007015917277855
+        ],
+        "interpretation": "strong_single_axis_component"
+      },
+      "warnings": []
+    },
+    "crossing_030_120.png": {
+      "schema_version": "1.0",
+      "angle_convention": "structure angle; 0=horizontal; counter-clockwise; modulo 180 degrees",
+      "config": {
+        "bins": 180,
+        "gaussian_sigma": 1.0,
+        "sobel_size": 5,
+        "gradient_threshold": 0.05,
+        "gradient_weight": 2,
+        "histogram_sigma_deg": 2.0,
+        "min_frequency": 0.02,
+        "max_frequency": 0.45,
+        "use_hann": true,
+        "max_size": 2048
+      },
+      "metadata": {
+        "original_shape_hw": [
+          256,
+          256
+        ],
+        "cropped_shape_hw": [
+          256,
+          256
+        ],
+        "analysis_shape_hw": [
+          256,
+          256
+        ],
+        "resize_scale": 1.0,
+        "roi_xywh": null,
+        "input_min": 38.0,
+        "input_max": 217.0,
+        "normalization": "per-image min-max to [0,1]",
+        "pixel_spacing_assumption": "square pixels; frequency in cycles/analysis-pixel",
+        "spatial_fourier_peak_difference_deg": 44.825999978456935,
+        "excluded_border_pixels": 5,
+        "valid_gradient_fraction": 0.9219512939453125,
+        "frequency_bin_count": 41600,
+        "fourier_band_energy": 31917861.68528169
+      },
+      "spatial": {
+        "has_signal": true,
+        "peak_angle_deg": 74.83725528411124,
+        "mean_angle_deg": 30.740732976485084,
+        "resultant_length": 0.00011754241155323608,
+        "entropy_normalized": 0.9493758230876304,
+        "peak_mass_pm10deg": 0.2572582591136378,
+        "peaks_deg": [
+          74.83725528411124,
+          164.8627449001836
+        ],
+        "interpretation": "multimodal_or_mixed"
+      },
+      "fourier": {
+        "has_signal": true,
+        "peak_angle_deg": 30.011255305654306,
+        "mean_angle_deg": 30.080243957074543,
+        "resultant_length": 0.00015237829268289154,
+        "entropy_normalized": 0.6127920424929411,
+        "peak_mass_pm10deg": 0.4998408534669673,
+        "peaks_deg": [
+          30.011255305654306,
+          120.01124411825822
+        ],
+        "interpretation": "multimodal_or_mixed"
+      },
+      "warnings": [
+        "Spatial: low axial resultant; inspect the whole histogram for multiple peaks or diffuse content.",
+        "Fourier: low axial resultant; inspect the whole histogram for multiple peaks or diffuse content.",
+        "Methods disagree by more than 10 degrees: examine multiple scales, peaks, ROI and frequency limits."
+      ]
+    },
+    "white_noise.png": {
+      "schema_version": "1.0",
+      "angle_convention": "structure angle; 0=horizontal; counter-clockwise; modulo 180 degrees",
+      "config": {
+        "bins": 180,
+        "gaussian_sigma": 1.0,
+        "sobel_size": 5,
+        "gradient_threshold": 0.05,
+        "gradient_weight": 2,
+        "histogram_sigma_deg": 2.0,
+        "min_frequency": 0.02,
+        "max_frequency": 0.45,
+        "use_hann": true,
+        "max_size": 2048
+      },
+      "metadata": {
+        "original_shape_hw": [
+          256,
+          256
+        ],
+        "cropped_shape_hw": [
+          256,
+          256
+        ],
+        "analysis_shape_hw": [
+          256,
+          256
+        ],
+        "resize_scale": 1.0,
+        "roi_xywh": null,
+        "input_min": 0.0,
+        "input_max": 255.0,
+        "normalization": "per-image min-max to [0,1]",
+        "pixel_spacing_assumption": "square pixels; frequency in cycles/analysis-pixel",
+        "spatial_fourier_peak_difference_deg": 25.810340502665298,
+        "excluded_border_pixels": 5,
+        "valid_gradient_fraction": 0.9004058837890625,
+        "frequency_bin_count": 41600,
+        "fourier_band_energy": 3948937.2859241366
+      },
+      "spatial": {
+        "has_signal": true,
+        "peak_angle_deg": 25.61362138085159,
+        "mean_angle_deg": 31.11319878364819,
+        "resultant_length": 0.02712630848791429,
+        "entropy_normalized": 0.999779795986066,
+        "peak_mass_pm10deg": 0.12069162293788878,
+        "peaks_deg": [
+          25.61362138085159
+        ],
+        "interpretation": "diffuse_or_weakly_oriented"
+      },
+      "fourier": {
+        "has_signal": true,
+        "peak_angle_deg": 51.42396188351688,
+        "mean_angle_deg": 66.60950796901065,
+        "resultant_length": 0.02000002766847917,
+        "entropy_normalized": 0.9989146804338065,
+        "peak_mass_pm10deg": 0.12298747329041487,
+        "peaks_deg": [
+          51.42396188351688,
+          106.36693602910807,
+          67.44591277961116
+        ],
+        "interpretation": "diffuse_or_weakly_oriented"
+      },
+      "warnings": [
+        "Spatial: low axial resultant; inspect the whole histogram for multiple peaks or diffuse content.",
+        "Fourier: low axial resultant; inspect the whole histogram for multiple peaks or diffuse content.",
+        "Methods disagree by more than 10 degrees: examine multiple scales, peaks, ROI and frequency limits."
+      ]
+    },
+    "constant.png": {
+      "schema_version": "1.0",
+      "angle_convention": "structure angle; 0=horizontal; counter-clockwise; modulo 180 degrees",
+      "config": {
+        "bins": 180,
+        "gaussian_sigma": 1.0,
+        "sobel_size": 5,
+        "gradient_threshold": 0.05,
+        "gradient_weight": 2,
+        "histogram_sigma_deg": 2.0,
+        "min_frequency": 0.02,
+        "max_frequency": 0.45,
+        "use_hann": true,
+        "max_size": 2048
+      },
+      "metadata": {
+        "original_shape_hw": [
+          256,
+          256
+        ],
+        "cropped_shape_hw": [
+          256,
+          256
+        ],
+        "analysis_shape_hw": [
+          256,
+          256
+        ],
+        "resize_scale": 1.0,
+        "roi_xywh": null,
+        "input_min": 128.0,
+        "input_max": 128.0,
+        "normalization": "per-image min-max to [0,1]",
+        "pixel_spacing_assumption": "square pixels; frequency in cycles/analysis-pixel",
+        "excluded_border_pixels": 5,
+        "valid_gradient_fraction": 0.0,
+        "frequency_bin_count": 41600,
+        "fourier_band_energy": 0.0
+      },
+      "spatial": {
+        "has_signal": false,
+        "peak_angle_deg": null,
+        "mean_angle_deg": null,
+        "resultant_length": null,
+        "entropy_normalized": null,
+        "peak_mass_pm10deg": null,
+        "peaks_deg": [],
+        "interpretation": "no_signal"
+      },
+      "fourier": {
+        "has_signal": false,
+        "peak_angle_deg": null,
+        "mean_angle_deg": null,
+        "resultant_length": null,
+        "entropy_normalized": null,
+        "peak_mass_pm10deg": null,
+        "peaks_deg": [],
+        "interpretation": "no_signal"
+      },
+      "warnings": [
+        "Spatial: no usable directional energy; angle is undefined.",
+        "Fourier: no usable directional energy; angle is undefined."
+      ]
+    },
+    "two_regions_020_070.png": {
+      "schema_version": "1.0",
+      "angle_convention": "structure angle; 0=horizontal; counter-clockwise; modulo 180 degrees",
+      "config": {
+        "bins": 180,
+        "gaussian_sigma": 1.0,
+        "sobel_size": 5,
+        "gradient_threshold": 0.05,
+        "gradient_weight": 2,
+        "histogram_sigma_deg": 2.0,
+        "min_frequency": 0.02,
+        "max_frequency": 0.45,
+        "use_hann": true,
+        "max_size": 2048
+      },
+      "metadata": {
+        "original_shape_hw": [
+          256,
+          256
+        ],
+        "cropped_shape_hw": [
+          256,
+          256
+        ],
+        "analysis_shape_hw": [
+          256,
+          256
+        ],
+        "resize_scale": 1.0,
+        "roi_xywh": null,
+        "input_min": 38.0,
+        "input_max": 217.0,
+        "normalization": "per-image min-max to [0,1]",
+        "pixel_spacing_assumption": "square pixels; frequency in cycles/analysis-pixel",
+        "spatial_fourier_peak_difference_deg": 0.044371726402701483,
+        "excluded_border_pixels": 5,
+        "valid_gradient_fraction": 0.8819122314453125,
+        "frequency_bin_count": 41600,
+        "fourier_band_energy": 63174828.35281232
+      },
+      "spatial": {
+        "has_signal": true,
+        "peak_angle_deg": 70.15896696616569,
+        "mean_angle_deg": 45.303298108611365,
+        "resultant_length": 0.6282109400315056,
+        "entropy_normalized": 0.5685130850145997,
+        "peak_mass_pm10deg": 0.4952524402927951,
+        "peaks_deg": [
+          70.15896696616569,
+          19.835973988176796
+        ],
+        "interpretation": "mixed_or_moderately_oriented"
+      },
+      "fourier": {
+        "has_signal": true,
+        "peak_angle_deg": 70.11459523976299,
+        "mean_angle_deg": 45.132067915646275,
+        "resultant_length": 0.6223516611825128,
+        "entropy_normalized": 0.7088128733901782,
+        "peak_mass_pm10deg": 0.48522487529609865,
+        "peaks_deg": [
+          70.11459523976299,
+          20.083902573326295
+        ],
+        "interpretation": "mixed_or_moderately_oriented"
+      },
+      "warnings": []
+    },
+    "rectangular_035.png": {
+      "schema_version": "1.0",
+      "angle_convention": "structure angle; 0=horizontal; counter-clockwise; modulo 180 degrees",
+      "config": {
+        "bins": 180,
+        "gaussian_sigma": 1.0,
+        "sobel_size": 5,
+        "gradient_threshold": 0.05,
+        "gradient_weight": 2,
+        "histogram_sigma_deg": 2.0,
+        "min_frequency": 0.02,
+        "max_frequency": 0.45,
+        "use_hann": true,
+        "max_size": 2048
+      },
+      "metadata": {
+        "original_shape_hw": [
+          192,
+          384
+        ],
+        "cropped_shape_hw": [
+          192,
+          384
+        ],
+        "analysis_shape_hw": [
+          192,
+          384
+        ],
+        "resize_scale": 1.0,
+        "roi_xywh": null,
+        "input_min": 38.0,
+        "input_max": 217.0,
+        "normalization": "per-image min-max to [0,1]",
+        "pixel_spacing_assumption": "square pixels; frequency in cycles/analysis-pixel",
+        "spatial_fourier_peak_difference_deg": 0.025988584553857663,
+        "excluded_border_pixels": 5,
+        "valid_gradient_fraction": 0.8938666449652778,
+        "frequency_bin_count": 46828,
+        "fourier_band_energy": 80836344.13647448
+      },
+      "spatial": {
+        "has_signal": true,
+        "peak_angle_deg": 34.895614199242864,
+        "mean_angle_deg": 34.88040269988834,
+        "resultant_length": 0.9974994293519667,
+        "entropy_normalized": 0.409320009679202,
+        "peak_mass_pm10deg": 0.9999999988165214,
+        "peaks_deg": [
+          34.895614199242864
+        ],
+        "interpretation": "strong_single_axis_component"
+      },
+      "fourier": {
+        "has_signal": true,
+        "peak_angle_deg": 34.92160278379672,
+        "mean_angle_deg": 35.047183213218275,
+        "resultant_length": 0.9951985901590142,
+        "entropy_normalized": 0.4721415470659881,
+        "peak_mass_pm10deg": 0.999563081748284,
+        "peaks_deg": [
+          34.92160278379672
+        ],
+        "interpretation": "strong_single_axis_component"
+      },
+      "warnings": []
+    },
+    "roi_left": {
+      "schema_version": "1.0",
+      "angle_convention": "structure angle; 0=horizontal; counter-clockwise; modulo 180 degrees",
+      "config": {
+        "bins": 180,
+        "gaussian_sigma": 1.0,
+        "sobel_size": 5,
+        "gradient_threshold": 0.05,
+        "gradient_weight": 2,
+        "histogram_sigma_deg": 2.0,
+        "min_frequency": 0.02,
+        "max_frequency": 0.45,
+        "use_hann": true,
+        "max_size": 2048
+      },
+      "metadata": {
+        "original_shape_hw": [
+          256,
+          256
+        ],
+        "cropped_shape_hw": [
+          240,
+          112
+        ],
+        "analysis_shape_hw": [
+          240,
+          112
+        ],
+        "resize_scale": 1.0,
+        "roi_xywh": [
+          8,
+          8,
+          112,
+          240
+        ],
+        "input_min": 38.0,
+        "input_max": 217.0,
+        "normalization": "per-image min-max to [0,1]",
+        "pixel_spacing_assumption": "square pixels; frequency in cycles/analysis-pixel",
+        "spatial_fourier_peak_difference_deg": 2.8911859546908545,
+        "excluded_border_pixels": 5,
+        "valid_gradient_fraction": 0.8457217261904761,
+        "frequency_bin_count": 17060,
+        "fourier_band_energy": 10687822.102671247
+      },
+      "spatial": {
+        "has_signal": true,
+        "peak_angle_deg": 19.83808269795601,
+        "mean_angle_deg": 19.818226663598853,
+        "resultant_length": 0.9974746205561488,
+        "entropy_normalized": 0.41027119005982493,
+        "peak_mass_pm10deg": 0.9999999987341437,
+        "peaks_deg": [
+          19.83808269795601
+        ],
+        "interpretation": "strong_single_axis_component"
+      },
+      "fourier": {
+        "has_signal": true,
+        "peak_angle_deg": 16.94689674326516,
+        "mean_angle_deg": 19.903793950265577,
+        "resultant_length": 0.9850719260468472,
+        "entropy_normalized": 0.5651509735289708,
+        "peak_mass_pm10deg": 0.9058702416522415,
+        "peaks_deg": [
+          16.94689674326516
+        ],
+        "interpretation": "strong_single_axis_component"
+      },
+      "warnings": []
+    },
+    "roi_right": {
+      "schema_version": "1.0",
+      "angle_convention": "structure angle; 0=horizontal; counter-clockwise; modulo 180 degrees",
+      "config": {
+        "bins": 180,
+        "gaussian_sigma": 1.0,
+        "sobel_size": 5,
+        "gradient_threshold": 0.05,
+        "gradient_weight": 2,
+        "histogram_sigma_deg": 2.0,
+        "min_frequency": 0.02,
+        "max_frequency": 0.45,
+        "use_hann": true,
+        "max_size": 2048
+      },
+      "metadata": {
+        "original_shape_hw": [
+          256,
+          256
+        ],
+        "cropped_shape_hw": [
+          240,
+          112
+        ],
+        "analysis_shape_hw": [
+          240,
+          112
+        ],
+        "resize_scale": 1.0,
+        "roi_xywh": [
+          136,
+          8,
+          112,
+          240
+        ],
+        "input_min": 38.0,
+        "input_max": 217.0,
+        "normalization": "per-image min-max to [0,1]",
+        "pixel_spacing_assumption": "square pixels; frequency in cycles/analysis-pixel",
+        "spatial_fourier_peak_difference_deg": 0.11847929351374376,
+        "excluded_border_pixels": 5,
+        "valid_gradient_fraction": 0.8455357142857143,
+        "frequency_bin_count": 17060,
+        "fourier_band_energy": 10688147.061474869
+      },
+      "spatial": {
+        "has_signal": true,
+        "peak_angle_deg": 70.16231477810462,
+        "mean_angle_deg": 70.18219665957763,
+        "resultant_length": 0.9974744886948999,
+        "entropy_normalized": 0.41027621951284043,
+        "peak_mass_pm10deg": 0.999999998718878,
+        "peaks_deg": [
+          70.16231477810462
+        ],
+        "interpretation": "strong_single_axis_component"
+      },
+      "fourier": {
+        "has_signal": true,
+        "peak_angle_deg": 70.04383548459087,
+        "mean_angle_deg": 69.89981409922788,
+        "resultant_length": 0.9931242765479414,
+        "entropy_normalized": 0.5065618045868264,
+        "peak_mass_pm10deg": 0.9965590042259782,
+        "peaks_deg": [
+          70.04383548459087
+        ],
+        "interpretation": "strong_single_axis_component"
+      },
+      "warnings": []
+    }
+  },
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+    "opencv_threads": 1,
+    "seed_list": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "opencv-python-headless": "4.13.0.92",
+    "matplotlib": "3.10.8",
+    "Pillow": "12.3.0",
+    "pytest": "9.2.0"
+  },
+  "fiji_plugin_execution": {
+    "status": "executed",
+    "mode": "official plugin in headless ImageJ runtime",
+    "imagej": "1.54p",
+    "directionality": "2.3.0",
+    "images": 15,
+    "gaussian_sigma": 1,
+    "bins": 180,
+    "results": "../fiji/",
+    "java": "17.0.20"
+  }
+}

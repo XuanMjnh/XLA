@@ -1,0 +1,34 @@
+{
+  "method": "fourier",
+  "python": {
+    "has_signal": true,
+    "peak_angle_deg": 119.9472561860895,
+    "mean_angle_deg": 120.00001751295878,
+    "resultant_length": 0.9972567220812679,
+    "entropy_normalized": 0.3979089378439706,
+    "peak_mass_pm10deg": 0.9999934202472709,
+    "peaks_deg": [
+      119.9472561860895
+    ],
+    "interpretation": "strong_single_axis_component"
+  },
+  "fiji": {
+    "has_signal": true,
+    "peak_angle_deg": 119.83237524352143,
+    "mean_angle_deg": 119.97634747568661,
+    "resultant_length": 0.9972413703791005,
+    "entropy_normalized": 0.3969212696012287,
+    "peak_mass_pm10deg": 0.9999888922602771,
+    "peaks_deg": [
+      119.83237524352143
+    ],
+    "interpretation": "strong_single_axis_component"
+  },
+  "peak_difference_deg": 0.11488094256807813,
+  "jensen_shannon_divergence_base2": 0.01245807562081419,
+  "histogram_mae": 0.001065523394964537,
+  "fiji_source_file": "fourier_components.csv",
+  "fiji_source_sha256": "fcdb4c93dba1820c7760c6e3415f9d50d3b21a29a2390d24dd3fa09be0598c8e",
+  "alignment": "merge equivalent endpoint bins; periodic linear interpolation; modulo 180 degrees",
+  "comparison": "Python raw histogram versus imported Fiji CSV"
+}

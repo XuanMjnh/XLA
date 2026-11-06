@@ -1,0 +1,34 @@
+{
+  "method": "spatial",
+  "python": {
+    "has_signal": true,
+    "peak_angle_deg": 29.946912470435585,
+    "mean_angle_deg": 29.839556121601163,
+    "resultant_length": 0.99991638886959,
+    "entropy_normalized": 0.08702556914531002,
+    "peak_mass_pm10deg": 1.0,
+    "peaks_deg": [
+      29.946912470435585
+    ],
+    "interpretation": "strong_single_axis_component"
+  },
+  "fiji": {
+    "has_signal": true,
+    "peak_angle_deg": 29.055146340522064,
+    "mean_angle_deg": 29.12541355438428,
+    "resultant_length": 0.9968321317582065,
+    "entropy_normalized": 0.13493228275574418,
+    "peak_mass_pm10deg": 0.9887231641140707,
+    "peaks_deg": [
+      29.055146340522064
+    ],
+    "interpretation": "strong_single_axis_component"
+  },
+  "peak_difference_deg": 0.8917661299135204,
+  "jensen_shannon_divergence_base2": 0.3635273924257884,
+  "histogram_mae": 0.007495263697751281,
+  "fiji_source_file": "local_gradient.csv",
+  "fiji_source_sha256": "5c4a9fd32fd7d02ea15c824ba7a8b0f5d7886d014691bdd5a3ba7142865eb632",
+  "alignment": "merge equivalent endpoint bins; periodic linear interpolation; modulo 180 degrees",
+  "comparison": "Python raw histogram versus imported Fiji CSV"
+}
