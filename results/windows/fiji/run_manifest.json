@@ -1,0 +1,97 @@
+{
+  "executed_utc": "2026-11-06T07:03:04.959383+00:00",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "java_executable": "C:\\Users\\Minh\\Downloads\\fiji-stable-win64-jdk\\Fiji.app\\java\\win64\\zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64\\bin\\java.exe",
+  "java_version": "openjdk version \"1.8.0_452\"\nOpenJDK Runtime Environment (Zulu 8.86.0.25-CA-win64) (build 1.8.0_452-b09)\nOpenJDK 64-Bit Server VM (Zulu 8.86.0.25-CA-win64) (build 25.452-b09, mixed mode)",
+  "mode": "official unmodified plugin from local Fiji",
+  "configuration": {
+    "bins": 180,
+    "range_deg": [
+      0,
+      180
+    ],
+    "gaussian_sigma": 1.0
+  },
+  "images": [
+    {
+      "filename": "constant.png",
+      "sha256": "b5d195a24d1de3dd3f3939292a7adb9447aa93ec0680b5bf25e998d70f6c2e73"
+    },
+    {
+      "filename": "crossing_030_120.png",
+      "sha256": "3c5ff557190533d50e3ecb89171359d2477f93036937d2f2ddee23344bc0ba20"
+    },
+    {
+      "filename": "rectangular_035.png",
+      "sha256": "b2fddf0512ef39ba09f930fa73172dd51402873aae4b2e5e45accb7b1c385827"
+    },
+    {
+      "filename": "stripes_000.png",
+      "sha256": "c61ab4a5db02d562b79c7ce226725c373077bed98265544a4ca541def9dff2bc"
+    },
+    {
+      "filename": "stripes_015.png",
+      "sha256": "788122eb6b8b4fddfa3599e604c91e818aef0e87d868e98cf1e0ca362ccd47c2"
+    },
+    {
+      "filename": "stripes_030.png",
+      "sha256": "b37a4c9449fcac809fcce0a98ba653d168bb01bf04e5e89a6016192d5f93d7de"
+    },
+    {
+      "filename": "stripes_030_noise015.png",
+      "sha256": "afb9def468f600a846bcf8db41a2c6741401681bd9e438e5395a4e3eee261ca0"
+    },
+    {
+      "filename": "stripes_045.png",
+      "sha256": "e40e36e07e595b9a13a995039107955fc150611da578c0b5df3280d5a989a8b9"
+    },
+    {
+      "filename": "stripes_060.png",
+      "sha256": "551f7a093bbf4c436571bf6bd68cb07516672e751eeb393c41c97df8ba814cd3"
+    },
+    {
+      "filename": "stripes_090.png",
+      "sha256": "58a4154c579092ab7b6c570e7a4c8ce2766c32e800b8904e4a9a6cc0727118cf"
+    },
+    {
+      "filename": "stripes_120.png",
+      "sha256": "151ca8dc12a1df461b734e613743ac0f1b9ae6f88d8dc09c7037251f8b1c25d8"
+    },
+    {
+      "filename": "stripes_150.png",
+      "sha256": "167a4d51fc349524a2eabc0555be56182ece1f4bca862dcfb8a2721891cdd093"
+    },
+    {
+      "filename": "stripes_179.png",
+      "sha256": "4a4d18622f2af5ebfb27531173105586c8744bf10cc2a9e09dc2e8281687758f"
+    },
+    {
+      "filename": "two_regions_020_070.png",
+      "sha256": "ad1d1f50d414c330542c414447b9607da509c8d15b5de9c82d5476a64b02c863"
+    },
+    {
+      "filename": "white_noise.png",
+      "sha256": "1dcc8339dbcbd5b5eb65f1ff9288040b9220c6e892f8a8e60ff03273ddce9837"
+    }
+  ],
+  "jars": [
+    {
+      "file": "ij-1.54p.jar",
+      "sha256": "2e1a09961dfb41cee66ddc821b2577a41a072566ce45a49bae69267099741e20"
+    },
+    {
+      "file": "Directionality_-2.3.0.jar",
+      "sha256": "81f916d6e21746c947240a93e1b788e27a6774a8033e439848a142ce3ca71cae"
+    },
+    {
+      "file": "jfreechart-1.5.5.jar",
+      "sha256": "0912b43a7dd4456c9fd4012fcc9c7b14fd70732adfeaead996824b734a036d5a"
+    },
+    {
+      "file": "jcommon-1.0.24.jar",
+      "sha256": "13e2596044935f76694cce65a22d1df908907ddcba0da2b49ff030930262d417"
+    }
+  ],
+  "source_sha256": "0dafe811cdbf34055fd6aa46bf3c5c88ba027a823efc4fcc2eb0bed01c77b141",
+  "timing_note": "Plugin single pass includes fit and JIT effects; not a controlled speed comparison with Python."
+}

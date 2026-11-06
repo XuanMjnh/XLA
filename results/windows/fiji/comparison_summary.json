@@ -1,0 +1,23 @@
+{
+  "images": 15,
+  "rows": 30,
+  "methods": {
+    "spatial": {
+      "valid_images": 14,
+      "single_orientation_images": 11,
+      "mean_jsd_all_valid": 0.22930562892269188,
+      "single_python_raw_mae_deg": 0.19066539576485944,
+      "single_fiji_raw_mae_deg": 0.5834086110400679,
+      "single_mean_peak_difference_deg": 0.5957300499198691
+    },
+    "fourier": {
+      "valid_images": 14,
+      "single_orientation_images": 11,
+      "mean_jsd_all_valid": 0.04740416994302722,
+      "single_python_raw_mae_deg": 0.16069066777484667,
+      "single_fiji_raw_mae_deg": 0.1979662916637414,
+      "single_mean_peak_difference_deg": 0.05065519462552004
+    }
+  },
+  "interpretation": "Raw aligned histograms. Ground-truth error only for single-orientation images. Multimodal peak differences and noise maxima are not accuracy scores."
+}

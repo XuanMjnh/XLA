@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "angle_convention": "structure angle; 0=horizontal; counter-clockwise; modulo 180 degrees",
+  "config": {
+    "bins": 180,
+    "gaussian_sigma": 1.0,
+    "sobel_size": 5,
+    "gradient_threshold": 0.05,
+    "gradient_weight": 2,
+    "histogram_sigma_deg": 2.0,
+    "min_frequency": 0.02,
+    "max_frequency": 0.45,
+    "use_hann": true,
+    "max_size": 2048
+  },
+  "metadata": {
+    "original_shape_hw": [
+      256,
+      256
+    ],
+    "cropped_shape_hw": [
+      256,
+      256
+    ],
+    "analysis_shape_hw": [
+      256,
+      256
+    ],
+    "resize_scale": 1.0,
+    "roi_xywh": null,
+    "input_min": 38.0,
+    "input_max": 217.0,
+    "normalization": "per-image min-max to [0,1]",
+    "pixel_spacing_assumption": "square pixels; frequency in cycles/analysis-pixel",
+    "spatial_fourier_peak_difference_deg": 0.05044586257227479,
+    "excluded_border_pixels": 5,
+    "valid_gradient_fraction": 0.89453125,
+    "frequency_bin_count": 41600,
+    "fourier_band_energy": 63872635.825982824
+  },
+  "spatial": {
+    "has_signal": true,
+    "peak_angle_deg": 14.858426599774171,
+    "mean_angle_deg": 14.839903728211826,
+    "resultant_length": 0.9974831800288614,
+    "entropy_normalized": 0.4099440038342592,
+    "peak_mass_pm10deg": 0.9999999993765323,
+    "peaks_deg": [
+      14.858426599774171
+    ],
+    "interpretation": "strong_single_axis_component"
+  },
+  "fourier": {
+    "has_signal": true,
+    "peak_angle_deg": 14.807980737201904,
+    "mean_angle_deg": 14.999970266739465,
+    "resultant_length": 0.9948766675791765,
+    "entropy_normalized": 0.47829584401193465,
+    "peak_mass_pm10deg": 0.999543619155015,
+    "peaks_deg": [
+      14.807980737201904
+    ],
+    "interpretation": "strong_single_axis_component"
+  },
+  "warnings": []
+}

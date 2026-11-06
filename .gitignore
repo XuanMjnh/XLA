@@ -18,12 +18,15 @@ env/
 /dist/
 *.egg-info/
 *.spec
+*.class
+/fiji/lib/
 
 # Temporary desktop sessions and local CLI exports
 /texturelab_*/
 /results/single/
 /results/batch/
 *.tmp
+/results/windows/document_preview/*.png
 
 # Local configuration and editor files
 .env

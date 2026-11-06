@@ -1,0 +1,38 @@
+{
+  "method": "spatial",
+  "python": {
+    "has_signal": true,
+    "peak_angle_deg": 17.961484984118677,
+    "mean_angle_deg": 31.11319878364817,
+    "resultant_length": 0.02719247143815335,
+    "entropy_normalized": 0.9995308142014357,
+    "peak_mass_pm10deg": 0.1210877430986827,
+    "peaks_deg": [
+      17.961484984118677,
+      34.00896277819424,
+      45.21937646916302
+    ],
+    "interpretation": "diffuse_or_weakly_oriented"
+  },
+  "fiji": {
+    "has_signal": true,
+    "peak_angle_deg": 23.919863858062307,
+    "mean_angle_deg": 22.30401389435706,
+    "resultant_length": 0.027783191056771475,
+    "entropy_normalized": 0.9994677810556262,
+    "peak_mass_pm10deg": 0.12038213765742567,
+    "peaks_deg": [
+      23.919863858062307,
+      172.66513757729228,
+      7.207095683058778
+    ],
+    "interpretation": "diffuse_or_weakly_oriented"
+  },
+  "peak_difference_deg": 5.95837887394363,
+  "jensen_shannon_divergence_base2": 0.0011065744494735122,
+  "histogram_mae": 0.000347029072721872,
+  "fiji_source_file": "local_gradient.csv",
+  "fiji_source_sha256": "4ac5d2c8b7e2bcdc8569042ac3e5202c36af42bef70fa6403dd830f6457c3b96",
+  "alignment": "merge equivalent endpoint bins; periodic linear interpolation; modulo 180 degrees",
+  "comparison": "Python raw histogram versus imported Fiji CSV"
+}

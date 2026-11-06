@@ -2,9 +2,11 @@
 from __future__ import annotations
 import csv
 from dataclasses import asdict, replace
+from datetime import datetime, timezone
 import importlib.metadata
 import json
 import platform
+import os
 from pathlib import Path
 from time import perf_counter
 import cv2
@@ -121,8 +123,8 @@ def run_experiments(directory: str | Path):
     ax.set(xlabel='Square image side (pixels)',ylabel='Median analysis time (ms)',
            title='CPU analysis only; 5 runs after warm-up; excludes image export')
     ax.grid(alpha=.25);save_plot(fig,figures/'runtime.png')
-    root=Path(__file__).resolve().parents[1]
-    samples=root/'data/samples';generate_samples(samples)
+    # Keep benchmark generation isolated from the reference input dataset.
+    samples=directory/'samples';generate_samples(samples)
     cases={}
     selected=['stripes_030.png','stripes_030_noise015.png','crossing_030_120.png',
               'white_noise.png','constant.png','two_regions_020_070.png','rectangular_035.png']
@@ -136,6 +138,8 @@ def run_experiments(directory: str | Path):
     cases['roi_left']=analyze(mixed,config,roi=(8,8,112,240)).summary()
     cases['roi_right']=analyze(mixed,config,roi=(136,8,112,240)).summary()
     environment={'python':platform.python_version(),'platform':platform.platform(),
+                 'cpu':platform.processor(), 'logical_cpus':os.cpu_count(),
+                 'created_utc':datetime.now(timezone.utc).isoformat(),
                  'opencv_threads':cv2.getNumThreads(),'seed_list':SEEDS}
     for dist in ['numpy','scipy','opencv-python-headless','opencv-python','matplotlib','Pillow','pytest']:
         try:environment[dist]=importlib.metadata.version(dist)

@@ -15,15 +15,17 @@ from time import perf_counter
 import uuid
 import zipfile
 import numpy as np
-from PySide6.QtCore import Qt, QRect, QRectF, Signal, QThread, QSettings
+from PySide6.QtCore import Qt, QRect, QRectF, QSize, Signal, QThread, QSettings
 from PySide6.QtGui import QAction, QPixmap, QPainter, QPen, QColor, QKeySequence, QPalette
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QFormLayout,
     QPushButton, QLabel, QListWidget, QListWidgetItem, QFileDialog, QMessageBox,
-    QSplitter, QTabWidget, QScrollArea, QGroupBox, QSpinBox, QDoubleSpinBox,
-    QComboBox, QCheckBox, QTableWidget, QTableWidgetItem, QHeaderView,
+    QSplitter, QTabWidget, QScrollArea, QSpinBox, QDoubleSpinBox,
+    QComboBox, QTableWidget, QTableWidgetItem, QHeaderView,
     QAbstractItemView, QProgressBar, QToolBar, QDialog, QDialogButtonBox,
+    QFrame, QStackedWidget,
 )
+from desktop_ui import STYLE, EmptyState, OrangeCheckBox, ResultsTable, Section, brand_pixmap, icon
 from texture.analysis import AnalysisConfig, analyze
 from texture.io import load_image, png_bytes, SUPPORTED_EXTENSIONS
 from texture.export import write_export
@@ -93,6 +95,15 @@ class ImageView(QWidget):
         self.roi = None
         self.origin = None
         self.drag = None
+        self.empty = None
+
+    def set_empty_state(self, title, description='', action=None):
+        layout = QVBoxLayout(self); layout.setContentsMargins(24, 24, 24, 24)
+        self.empty = EmptyState(title, description, action)
+        layout.addWidget(self.empty)
+
+    def update_empty_state(self):
+        if self.empty: self.empty.setVisible(self.pixmap.isNull())
 
     def image_rect(self):
         if self.pixmap.isNull():
@@ -102,15 +113,19 @@ class ImageView(QWidget):
 
     def set_data(self, data):
         self.pixmap = QPixmap(); self.pixmap.loadFromData(data)
-        self.roi = None; self.update()
+        self.roi = None; self.update_empty_state(); self.update()
 
     def set_file(self, path):
         self.pixmap = QPixmap(str(path)) if path else QPixmap()
-        self.roi = None; self.update()
+        self.roi = None; self.update_empty_state(); self.update()
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        painter.fillRect(self.rect(), QColor('#eef2f7'))
+        painter.fillRect(self.rect(), QColor('#fafbfe'))
+        if self.pixmap.isNull() and self.empty:
+            painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+            painter.setPen(QPen(QColor('#d8deea'), 1, Qt.PenStyle.DashLine))
+            painter.drawRoundedRect(QRectF(self.rect()).adjusted(14, 18, -14, -14), 10, 10)
         area = self.image_rect()
         if not self.pixmap.isNull():
             painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
@@ -121,7 +136,7 @@ class ImageView(QWidget):
                 sx,sy = area.width()/self.pixmap.width(), area.height()/self.pixmap.height()
                 selection = QRectF(area.left()+x*sx, area.top()+y*sy, w*sx, h*sy)
             if selection is not None:
-                painter.setPen(QPen(QColor('#22d3ee'), 2)); painter.setBrush(QColor(20,184,166,35))
+                painter.setPen(QPen(QColor('#c4510c'), 2)); painter.setBrush(QColor(196,81,12,35))
                 painter.drawRect(selection)
 
     def mousePressEvent(self, event):
@@ -186,7 +201,8 @@ class AnalysisWorker(QThread):
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('TextureLab · Phân tích hướng kết cấu'); self.resize(1440, 940)
+        self.setWindowTitle('TextureLab · Phân tích hướng kết cấu'); self.resize(1600, 940)
+        self.setMinimumSize(1180, 760); self.setWindowIcon(icon('layers', '#c4510c'))
         self.settings = QSettings('TextureLab', 'Desktop')
         self.session = tempfile.TemporaryDirectory(prefix='texturelab_')
         self.records = {}; self.rois = {}; self.worker = None; self.errors = []; self.inputs = {}
@@ -194,39 +210,63 @@ class MainWindow(QMainWindow):
         geometry = self.settings.value('geometry')
         if geometry: self.restoreGeometry(geometry)
 
-    def button(self, text, callback):
-        button = QPushButton(text); button.clicked.connect(callback); return button
+    def button(self, text, callback, glyph=None):
+        button = QPushButton(text); button.clicked.connect(callback)
+        if glyph: button.setIcon(icon(glyph))
+        return button
 
     def build_ui(self):
-        toolbar = QToolBar(); toolbar.setMovable(False); self.addToolBar(toolbar)
-        for name, callback, shortcut in [
-            ('Mở ảnh', self.open_files, QKeySequence.StandardKey.Open),
-            ('Mở thư mục', self.open_folder, None),
-            ('Lưu kết quả', self.export_current, QKeySequence.StandardKey.Save),
-            ('Lưu toàn bộ', self.export_all, None),
+        toolbar = QToolBar(); toolbar.setMovable(False); toolbar.setFloatable(False)
+        toolbar.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        toolbar.setIconSize(QSize(18,18)); self.addToolBar(toolbar)
+        brand = QWidget(); brand_layout = QHBoxLayout(brand); brand_layout.setContentsMargins(0,0,0,0)
+        logo = QLabel(); logo.setPixmap(brand_pixmap()); brand_layout.addWidget(logo)
+        title = QLabel('TEXTURELAB'); title.setObjectName('brand'); brand_layout.addWidget(title)
+        toolbar.addWidget(brand); toolbar.addSeparator()
+        for name, callback, shortcut, glyph in [
+            ('Mở ảnh', self.open_files, QKeySequence.StandardKey.Open, 'image'),
+            ('Mở thư mục', self.open_folder, None, 'folder'),
+            ('Lưu kết quả', self.export_current, QKeySequence.StandardKey.Save, 'save'),
+            ('Lưu toàn bộ', self.export_all, None, 'layers'),
         ]:
-            action = QAction(name, self)
+            action = QAction(icon(glyph, '#ffffff' if name == 'Mở ảnh' else '#273044'), name, self)
             if shortcut: action.setShortcut(shortcut)
             action.triggered.connect(callback); toolbar.addAction(action)
+            if name == 'Mở ảnh':
+                toolbar.widgetForAction(action).setObjectName('primary'); self.open_action = action
+            if name == 'Mở thư mục': self.folder_action = action
             if name == 'Lưu kết quả': self.save_action = action
             if name == 'Lưu toàn bộ': self.save_all_action = action
         toolbar.addSeparator()
-        action = QAction('Thông tin nhóm', self); action.triggered.connect(self.edit_group); toolbar.addAction(action)
-        main = QSplitter(); self.setCentralWidget(main)
-        left = QWidget(); lv = QVBoxLayout(left)
-        title = QLabel('TEXTURELAB'); title.setObjectName('brand'); lv.addWidget(title)
-        self.group_label = QLabel(self.settings.value('group', '')); lv.addWidget(self.group_label)
-        lv.addWidget(QLabel('DANH SÁCH ẢNH'))
-        self.file_list = QListWidget(); self.file_list.currentItemChanged.connect(self.select_file); lv.addWidget(self.file_list, 1)
-        row = QHBoxLayout(); row.addWidget(self.button('Xóa ảnh', self.remove_current)); row.addWidget(self.button('Xóa tất cả', self.clear_files)); lv.addLayout(row)
+        action = QAction(icon('info'), 'Thông tin nhóm', self); action.triggered.connect(self.edit_group); toolbar.addAction(action)
+        root = QWidget(); root_layout = QVBoxLayout(root); root_layout.setContentsMargins(12,14,12,8)
+        main = QSplitter(); main.setChildrenCollapsible(False); main.setHandleWidth(16); root_layout.addWidget(main); self.setCentralWidget(root)
+        left = QFrame(); left.setObjectName('card'); left.setMinimumWidth(220); lv = QVBoxLayout(left)
+        lv.setContentsMargins(10,8,10,12); lv.setSpacing(12)
+        heading = QLabel('  DANH SÁCH ẢNH'); heading.setObjectName('listHeading'); lv.addWidget(heading)
+        self.group_label = QLabel(self.settings.value('group', '')); self.group_label.setObjectName('muted')
+        self.group_label.setWordWrap(True); self.group_label.setVisible(bool(self.group_label.text())); lv.addWidget(self.group_label)
+        self.file_list = QListWidget(); self.file_list.currentItemChanged.connect(self.select_file)
+        self.file_stack = QStackedWidget(); self.file_stack.addWidget(self.file_list)
+        self.list_empty = EmptyState('Chưa có ảnh nào', 'Mở ảnh hoặc thư mục để bắt đầu phân tích kết cấu.')
+        self.file_stack.addWidget(self.list_empty); lv.addWidget(self.file_stack, 1)
+        self.remove_button = self.button('Xóa ảnh', self.remove_current, 'trash')
+        self.clear_button = self.button('Xóa tất cả', self.clear_files, 'layers')
+        row = QHBoxLayout(); row.addWidget(self.remove_button); row.addWidget(self.clear_button); lv.addLayout(row)
         main.addWidget(left)
-        center = QWidget(); cv = QVBoxLayout(center)
-        self.filename = QLabel(''); self.filename.setObjectName('filename'); cv.addWidget(self.filename)
-        self.tabs = QTabWidget(); cv.addWidget(self.tabs, 1); self.views = {}
+        center = QWidget(); cv = QVBoxLayout(center); cv.setContentsMargins(0,0,0,0); cv.setSpacing(14)
+        viewer = QFrame(); viewer.setObjectName('card'); viewer_layout = QVBoxLayout(viewer)
+        viewer_layout.setContentsMargins(12,10,12,10); viewer_layout.setSpacing(0)
+        self.filename = QLabel(''); self.filename.setObjectName('filename'); self.filename.hide(); viewer_layout.addWidget(self.filename)
+        self.tabs = QTabWidget(); self.tabs.setDocumentMode(True); self.tabs.setIconSize(QSize(17,17))
+        viewer_layout.addWidget(self.tabs, 1); cv.addWidget(viewer, 1); self.views = {}
         for name, label in [('source','Ảnh gốc'),('histogram','Histogram'),('orientation_map','Bản đồ hướng'),
                             ('gradient_magnitude','Gradient'),('fft_spectrum','Phổ Fourier'),('preprocessed','Tiền xử lý')]:
             view = ImageView(selectable=name == 'source'); self.views[name] = view
-            if name == 'source': view.roiChanged.connect(self.set_roi)
+            if name == 'source':
+                view.roiChanged.connect(self.set_roi)
+                view.set_empty_state('Mở ảnh để xem và phân tích', 'Kéo thả ảnh vào đây hoặc sử dụng nút “Mở ảnh” ở thanh công cụ.', self.open_files)
+            else: view.set_empty_state('Chưa có kết quả', 'Chạy phân tích để xem kết quả tại đây.')
             if name == 'orientation_map':
                 panel=QWidget(); layout=QVBoxLayout(panel); layout.setContentsMargins(0,0,0,0)
                 layout.addWidget(view,1); self.legend=ImageView(); self.legend.setMinimumHeight(70); self.legend.setMaximumHeight(85)
@@ -242,13 +282,27 @@ class MainWindow(QMainWindow):
         controls.addWidget(self.import_fiji); controls.addStretch(); fv.addLayout(controls)
         self.comparison_label = QLabel(''); self.comparison_label.setWordWrap(True); fv.addWidget(self.comparison_label)
         self.comparison_view = ImageView(); fv.addWidget(self.comparison_view, 1); self.tabs.addTab(self.fiji_panel, 'Đối chiếu Fiji')
-        self.stats = QTableWidget(2,6)
+        for index, glyph in enumerate(['image','histogram','compass','gradient','fourier','sliders','data','compare']):
+            self.tabs.setTabIcon(index, icon(glyph))
+        self.tabs.currentChanged.connect(self.update_tab_icons); self.update_tab_icons(0)
+        self.stats = ResultsTable()
         self.stats.setHorizontalHeaderLabels(['Phương pháp','Góc đỉnh (°)','R','Entropy','Khối lượng ±10°','Phân bố'])
         self.stats.verticalHeader().hide(); self.stats.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-        self.stats.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers); self.stats.setMaximumHeight(125); cv.addWidget(self.stats)
-        self.metadata = QLabel(''); self.metadata.setWordWrap(True); cv.addWidget(self.metadata); main.addWidget(center)
-        scroll = QScrollArea(); scroll.setWidgetResizable(True); right = QWidget(); rv = QVBoxLayout(right)
-        params = QGroupBox('THAM SỐ'); form = QFormLayout(params)
+        self.stats.horizontalHeader().setMinimumSectionSize(105)
+        for column in range(self.stats.columnCount()):
+            header = self.stats.horizontalHeaderItem(column); header.setToolTip(header.text())
+        self.stats.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers); self.stats.setShowGrid(False)
+        self.stats.setAlternatingRowColors(True)
+        results = QFrame(); results.setObjectName('card'); results.setFixedHeight(168)
+        results_layout = QVBoxLayout(results); results_layout.setContentsMargins(12,10,12,10); results_layout.addWidget(self.stats)
+        cv.addWidget(results)
+        self.metadata = QLabel(''); self.metadata.setObjectName('muted'); self.metadata.setWordWrap(True); self.metadata.hide(); cv.addWidget(self.metadata); main.addWidget(center)
+        scroll = QScrollArea(); scroll.setWidgetResizable(True); scroll.setMinimumWidth(310)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        right = QWidget(); rv = QVBoxLayout(right); rv.setContentsMargins(0,0,0,0); rv.setSpacing(10)
+        params = Section('THAM SỐ', 'settings'); form = QFormLayout(params.body)
+        form.setContentsMargins(0,6,0,0); form.setVerticalSpacing(5); form.setHorizontalSpacing(12)
+        form.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow)
         specs = [('bins','Số bin',18,720,180,0),('gaussian_sigma','Gaussian σ (px)',0,5,1,2),
                  ('gradient_threshold','Ngưỡng gradient',0,.99,.05,2),('histogram_sigma_deg','Làm trơn góc (°)',0,15,2,2),
                  ('min_frequency','Tần số nhỏ nhất',0,.499,.02,3),('max_frequency','Tần số lớn nhất',.001,.5,.45,3),
@@ -261,20 +315,32 @@ class MainWindow(QMainWindow):
         for key,label,items,default in [('sobel_size','Sobel',['3','5','7'],'5'),('gradient_weight','Trọng số',['1','2'],'2')]:
             box = QComboBox(); box.addItems(items); box.setCurrentText(default); box.currentIndexChanged.connect(self.invalidate)
             self.inputs[key] = box; form.addRow(label,box)
-        self.hann = QCheckBox('Cửa sổ Hann'); self.hann.setChecked(True); self.hann.toggled.connect(self.invalidate); form.addRow(self.hann)
-        self.arrays = QCheckBox('Lưu ma trận NPZ'); self.arrays.toggled.connect(self.invalidate); form.addRow(self.arrays); rv.addWidget(params)
-        region = QGroupBox('VÙNG PHÂN TÍCH'); rf = QFormLayout(region); self.roi_fields = []
+        self.hann = OrangeCheckBox('Cửa sổ Hann'); self.hann.setChecked(True); self.hann.toggled.connect(self.invalidate); form.addRow(self.hann)
+        self.arrays = OrangeCheckBox('Lưu ma trận NPZ'); self.arrays.toggled.connect(self.invalidate); form.addRow(self.arrays); rv.addWidget(params)
+        region = Section('VÙNG PHÂN TÍCH', 'roi'); rf = QFormLayout(region.body); self.roi_fields = []
+        rf.setContentsMargins(0,6,0,0); rf.setVerticalSpacing(6)
+        rf.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow)
         for label in ['X','Y','Rộng','Cao']:
             spin=QSpinBox(); spin.setRange(0,24000000); self.roi_fields.append(spin); rf.addRow(label,spin)
-        self.apply_roi = self.button('Áp dụng ROI',self.apply_roi_fields); rf.addRow(self.apply_roi)
-        self.reset_roi = self.button('Toàn ảnh',self.clear_roi); rf.addRow(self.reset_roi); rv.addWidget(region)
-        self.run_button = self.button('PHÂN TÍCH',self.analyze_current); self.run_button.setObjectName('primary')
-        self.batch_button = self.button('Phân tích toàn bộ', self.analyze_all)
-        self.cancel_button = self.button('Dừng',self.cancel); self.cancel_button.setEnabled(False)
-        rv.addWidget(self.run_button); rv.addWidget(self.batch_button); rv.addWidget(self.cancel_button); rv.addStretch()
-        scroll.setWidget(right); main.addWidget(scroll); main.setSizes([230,930,280])
+        self.apply_roi = self.button('Áp dụng ROI',self.apply_roi_fields, 'roi'); rf.addRow(self.apply_roi)
+        self.reset_roi = self.button('Toàn ảnh',self.clear_roi, 'roi'); rf.addRow(self.reset_roi); rv.addWidget(region)
+        self.run_button = self.button('PHÂN TÍCH',self.analyze_current); self.run_button.setObjectName('primary'); self.run_button.setIcon(icon('play', '#ffffff'))
+        self.batch_button = self.button('Phân tích toàn bộ', self.analyze_all, 'layers')
+        self.cancel_button = self.button('Dừng',self.cancel, 'stop'); self.cancel_button.setEnabled(False)
+        actions = QFrame(); actions.setObjectName('card'); av = QVBoxLayout(actions)
+        av.setContentsMargins(10,10,10,10); av.setSpacing(7)
+        av.addWidget(self.run_button); av.addWidget(self.batch_button); av.addWidget(self.cancel_button)
+        rv.addStretch(); scroll.setWidget(right)
+        sidebar = QWidget(); sidebar_layout = QVBoxLayout(sidebar)
+        sidebar_layout.setContentsMargins(0,0,0,0); sidebar_layout.setSpacing(10)
+        sidebar_layout.addWidget(scroll, 1); sidebar_layout.addWidget(actions)
+        main.addWidget(sidebar); main.setSizes([250,960,330]); main.setStretchFactor(1,1)
         self.progress = QProgressBar(); self.progress.setFixedWidth(180); self.progress.hide(); self.statusBar().addPermanentWidget(self.progress)
         self.statusBar().showMessage('Sẵn sàng'); self.refresh_actions()
+
+    def update_tab_icons(self, selected):
+        for index, glyph in enumerate(['image','histogram','compass','gradient','fourier','sliders','data','compare']):
+            self.tabs.setTabIcon(index, icon(glyph, '#ffffff' if index == selected else '#454c5c'))
 
     def current_path(self):
         item = self.file_list.currentItem(); return item.data(ROLE) if item else None
@@ -287,6 +353,10 @@ class MainWindow(QMainWindow):
 
     def refresh_actions(self):
         busy = self.worker is not None; has_file = self.current_path() is not None; has_result = self.current_path() in self.records
+        self.file_stack.setCurrentWidget(self.file_list if self.file_list.count() else self.list_empty)
+        self.remove_button.setEnabled(has_file and not busy); self.clear_button.setEnabled(bool(self.file_list.count()) and not busy)
+        self.open_action.setEnabled(not busy); self.folder_action.setEnabled(not busy)
+        self.views['source'].empty.open_button.setEnabled(not busy)
         self.run_button.setEnabled(has_file and not busy); self.batch_button.setEnabled(self.file_list.count() > 0 and not busy)
         self.save_action.setEnabled(has_result and not busy); self.save_all_action.setEnabled(bool(self.records) and not busy); self.import_fiji.setEnabled(has_result and not busy)
         for widget in [*self.inputs.values(), self.hann,self.arrays,self.apply_roi,self.reset_roi,*self.roi_fields,self.file_list]: widget.setEnabled(not busy)
@@ -327,6 +397,7 @@ class MainWindow(QMainWindow):
 
     def select_file(self, *args):
         self.clear_results(); path=self.current_path(); self.filename.setText(Path(path).name if path else ''); self.views['source'].set_file(None)
+        self.filename.setVisible(bool(path))
         if path:
             try:
                 image=load_image(path)
@@ -346,6 +417,7 @@ class MainWindow(QMainWindow):
         for key,view in self.views.items():
             if key != 'source': view.set_file(None)
         self.legend.set_file(None); self.stats.clearContents(); self.table.setRowCount(0); self.metadata.clear(); self.clear_comparison()
+        self.stats.show_empty(True); self.metadata.hide()
 
     def invalidate(self, *args):
         if not hasattr(self,'stats'): return
@@ -406,6 +478,7 @@ class MainWindow(QMainWindow):
         if self.errors: self.notify_error('\n'.join(self.errors))
 
     def show_record(self, record):
+        self.stats.show_empty(False); self.metadata.show()
         folder=Path(record['directory']); summary=record['summary']; self.legend.set_file(folder/'orientation_legend.png')
         for key,view in self.views.items():
             if key!='source': view.set_file(folder/(key+'.png'))
@@ -466,7 +539,7 @@ class MainWindow(QMainWindow):
         buttons=QDialogButtonBox(QDialogButtonBox.StandardButton.Save|QDialogButtonBox.StandardButton.Cancel)
         buttons.accepted.connect(dialog.accept); buttons.rejected.connect(dialog.reject); form.addRow(buttons)
         if dialog.exec():
-            self.settings.setValue('group',group.text().strip()); self.settings.setValue('members',members.toPlainText().strip()); self.group_label.setText(group.text().strip())
+            self.settings.setValue('group',group.text().strip()); self.settings.setValue('members',members.toPlainText().strip()); self.group_label.setText(group.text().strip()); self.group_label.setVisible(bool(group.text().strip()))
             for record in self.records.values():
                 record['summary']['submission']={'group':group.text().strip(),'members':members.toPlainText().strip()}
                 atomic_bytes(Path(record['directory'])/'summary.json',json.dumps(record['summary'],indent=2,ensure_ascii=False,allow_nan=False).encode())
@@ -481,34 +554,6 @@ class MainWindow(QMainWindow):
         self.settings.setValue('geometry',self.saveGeometry()); self.session.cleanup(); event.accept()
 
 
-STYLE = '''
-QMainWindow, QDialog { background: #f6f8fb; }
-QWidget { font-family: "DejaVu Sans", "Segoe UI", sans-serif; font-size: 12px; color: #243449; }
-QToolBar { background: #ffffff; border-bottom: 1px solid #dce3ec; spacing: 10px; padding: 9px; }
-QToolButton { padding: 8px 14px; border-radius: 5px; }
-QToolButton:hover { background: #e3f3f1; }
-QLabel#brand { font-size: 22px; font-weight: 800; color: #0f766e; padding: 9px 0; }
-QLabel#filename { font-size: 17px; font-weight: 600; padding: 7px 0; }
-QGroupBox { border: 1px solid #dce3ec; border-radius: 7px; margin-top: 17px; padding: 15px 9px 8px; font-weight: 600; }
-QGroupBox::title { subcontrol-origin: margin; left: 10px; }
-QPushButton { background: #ffffff; padding: 9px; border: 1px solid #cdd7e3; border-radius: 5px; }
-QPushButton:hover { background: #e7f4f2; border-color: #0d9488; }
-QPushButton#primary { background: #0f766e; color: white; font-weight: bold; padding: 13px; }
-QPushButton:disabled, QToolButton:disabled { color: #9aa7b7; background: #edf1f6; }
-QListWidget, QTableWidget { background: white; border: 1px solid #dce3ec; }
-QListWidget::item { padding: 9px 6px; }
-QListWidget::item:selected { background: #ddf3ee; color: #0f766e; }
-QTabWidget::pane { border: 1px solid #dce3ec; background: white; }
-QTabBar::tab { padding: 10px 11px; background: #edf2f7; border: 0; }
-QTabBar::tab:selected { background: white; color: #0f766e; }
-QSpinBox, QDoubleSpinBox, QComboBox, QLineEdit { background: white; padding: 5px; border: 1px solid #cdd7e3; border-radius: 4px; }
-QPlainTextEdit { background: white; border: 1px solid #cdd7e3; border-radius: 4px; }
-QHeaderView::section { background: #eef4f8; padding: 8px 3px; border: 0; font-weight: 600; }
-QStatusBar { background: white; border-top: 1px solid #dce3ec; }
-QScrollArea { border: 0; }
-'''
-
-
 def configure_appearance(app):
     """Use one complete light theme, including controls not covered by QSS."""
     app.setStyle('Fusion')
@@ -517,16 +562,16 @@ def configure_appearance(app):
         app.styleHints().setColorScheme(Qt.ColorScheme.Light)
     palette = QPalette()
     colors = {
-        'Window': '#f6f8fb', 'WindowText': '#243449',
+        'Window': '#f6f8fb', 'WindowText': '#273044',
         'Base': '#ffffff', 'AlternateBase': '#eef4f8',
-        'Text': '#243449', 'PlaceholderText': '#64748b',
-        'Button': '#ffffff', 'ButtonText': '#243449',
+        'Text': '#273044', 'PlaceholderText': '#6a7284',
+        'Button': '#ffffff', 'ButtonText': '#273044',
         'Light': '#ffffff', 'Midlight': '#edf2f7',
-        'Mid': '#cdd7e3', 'Dark': '#64748b', 'Shadow': '#243449',
-        'Highlight': '#ddf3ee', 'HighlightedText': '#0f766e',
-        'ToolTipBase': '#ffffff', 'ToolTipText': '#243449',
-        'Link': '#0f766e', 'LinkVisited': '#115e59',
-        'BrightText': '#ffffff', 'Accent': '#0f766e',
+        'Mid': '#dde2ec', 'Dark': '#6a7284', 'Shadow': '#273044',
+        'Highlight': '#f5e9df', 'HighlightedText': '#a64009',
+        'ToolTipBase': '#ffffff', 'ToolTipText': '#273044',
+        'Link': '#a64009', 'LinkVisited': '#913806',
+        'BrightText': '#ffffff', 'Accent': '#c4510c',
     }
     for group in (QPalette.ColorGroup.Active, QPalette.ColorGroup.Inactive,
                   QPalette.ColorGroup.Disabled):

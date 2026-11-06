@@ -13,18 +13,21 @@ public class DirectionalityBatch {
         Path input=Paths.get(args[0]); Path output=Paths.get(args[1]); Files.createDirectories(output);
         double sigma=Double.parseDouble(args[2]);
         List<Path> images=new ArrayList<>();
-        try (var files=Files.list(input)) { files.filter(p->p.toString().endsWith(".png")).sorted().forEach(images::add); }
-        StringBuilder log=new StringBuilder("ImageJ="+IJ.getVersion()+"\nJava="+System.getProperty("java.version")+"\nDirectionality=2.3.0\nBins=180\nRange=0..180\nGaussianSigma="+sigma+"\n");
+        try (java.util.stream.Stream<Path> files=Files.list(input)) { files.filter(p->p.toString().toLowerCase(Locale.ROOT).endsWith(".png")).sorted().forEach(images::add); }
+        java.lang.reflect.Field version=Directionality_.class.getDeclaredField("VERSION_STR");version.setAccessible(true);
+        StringBuilder log=new StringBuilder("ImageJ="+IJ.getVersion()+"\nJava="+System.getProperty("java.version")+"\nDirectionality="+version.get(null)+"\nBins=180\nRange=0..180\nGaussianSigma="+sigma+"\n");
         for (Path path:images) {
             ImagePlus source=IJ.openImage(path.toString());
             if (source==null) throw new IOException("Cannot open "+path);
-            var processor=source.getProcessor().convertToFloatProcessor();
+            if (source.getStackSize()!=1 || source.getBitDepth()==24)
+                throw new IllegalArgumentException("Use single-frame grayscale inputs: "+path);
+            ij.process.FloatProcessor processor=source.getProcessor().convertToFloatProcessor();
             if (sigma>0) new GaussianBlur().blurGaussian(processor,sigma);
             ImagePlus working=new ImagePlus(path.getFileName().toString(),processor);
             String stem=path.getFileName().toString().replaceFirst("\\.png$","");
             Path folder=output.resolve(stem);Files.createDirectories(folder);
             for (int mode=0;mode<2;mode++) {
-                var analyzer=new Directionality_();analyzer.setImagePlus(working);
+                Directionality_ analyzer=new Directionality_();analyzer.setImagePlus(working);
                 analyzer.setMethod(mode==0?Directionality_.AnalysisMethod.LOCAL_GRADIENT_ORIENTATION:Directionality_.AnalysisMethod.FOURIER_COMPONENTS);
                 analyzer.setBinNumber(180);analyzer.setBinRange(0,180);analyzer.setBuildOrientationMapFlag(false);
                 long start=System.nanoTime();analyzer.computeHistograms();
@@ -48,7 +51,7 @@ public class DirectionalityBatch {
             source.close();working.close();
             System.out.println(stem);
         }
-        Files.writeString(output.resolve("settings.txt"),log.toString());
+        Files.write(output.resolve("settings.txt"),log.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));
         System.exit(0);
     }
 }

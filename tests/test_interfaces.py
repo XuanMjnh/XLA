@@ -17,6 +17,7 @@ from texture.synthetic import stripes, quantized
 from texture.io import png_bytes
 from texture.comparison import compare_histograms
 from app import MainWindow, configure_appearance, package_records
+from desktop_ui import Section
 
 @pytest.fixture(scope='session')
 def qt_app():
@@ -67,11 +68,11 @@ def test_appearance_independent_of_system_theme(qt_app, system_scheme):
         panel = w.findChild(QScrollArea).widget()
         for group in (QPalette.ColorGroup.Active, QPalette.ColorGroup.Inactive):
             assert panel.palette().color(group, QPalette.ColorRole.Window).name() == '#f6f8fb'
-            assert panel.palette().color(group, QPalette.ColorRole.WindowText).name() == '#243449'
+            assert panel.palette().color(group, QPalette.ColorRole.WindowText).name() == '#273044'
             assert editor.palette().color(group, QPalette.ColorRole.Base).name() == '#ffffff'
-            assert editor.palette().color(group, QPalette.ColorRole.Text).name() == '#243449'
+            assert editor.palette().color(group, QPalette.ColorRole.Text).name() == '#273044'
         assert panel.grab().toImage().pixelColor(0, 0).name() == '#f6f8fb'
-        assert w.inputs['bins'].palette().color(QPalette.ColorRole.Text).name() == '#243449'
+        assert w.inputs['bins'].palette().color(QPalette.ColorRole.Text).name() == '#273044'
         assert qt_app.palette().color(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Text).name() == '#9aa7b7'
         # A later system preference change must not replace the explicit palette.
         qt_app.styleHints().setColorScheme(Qt.ColorScheme.Dark)
@@ -92,6 +93,7 @@ def test_desktop_analysis_export_invalidation(window,qt_app,tmp_path):
     assert window.stats.item(0,1).text()!='—'
     assert window.table.rowCount()==180
     assert not window.views['histogram'].pixmap.isNull()
+    assert not window.stats.empty.isVisible()
     output=tmp_path/'out.zip';package_records([record],output)
     with zipfile.ZipFile(output) as z:
         assert 'report.html' in z.namelist()
@@ -99,6 +101,31 @@ def test_desktop_analysis_export_invalidation(window,qt_app,tmp_path):
     window.inputs['bins'].setValue(90)
     assert not window.records and not window.save_action.isEnabled()
     assert window.table.rowCount()==0
+    assert window.stats.empty.isVisible()
+
+
+def test_empty_state_open_remove_and_compact_layout(window, qt_app, tmp_path, monkeypatch):
+    path = create_image(tmp_path/'texture.png')
+    monkeypatch.setattr(QFileDialog, 'getOpenFileNames', lambda *a, **k: ([path], ''))
+    assert window.file_stack.currentWidget() is window.list_empty
+    QTest.mouseClick(window.views['source'].empty.open_button, Qt.MouseButton.LeftButton)
+    qt_app.processEvents()
+    assert window.current_path() == path
+    assert window.file_stack.currentWidget() is window.file_list
+    assert not window.views['source'].empty.isVisible()
+    window.showNormal(); window.resize(1180, 760); qt_app.processEvents()
+    assert window.run_button.isVisible()
+    assert window.run_button.mapTo(window, QPoint(0, 0)).y() + window.run_button.height() < window.height()
+    section = window.findChildren(Section)[0]
+    value = window.inputs['bins'].value()
+    QTest.mouseClick(section.toggle, Qt.MouseButton.LeftButton)
+    assert not section.body.isVisible()
+    QTest.mouseClick(section.toggle, Qt.MouseButton.LeftButton)
+    assert section.body.isVisible() and window.inputs['bins'].value() == value
+    QTest.mouseClick(window.remove_button, Qt.MouseButton.LeftButton); qt_app.processEvents()
+    assert window.file_stack.currentWidget() is window.list_empty
+    assert window.views['source'].empty.isVisible()
+    assert not window.run_button.isEnabled()
 
 
 def test_roi_drag_batch_duplicate_names(window,qt_app,tmp_path):

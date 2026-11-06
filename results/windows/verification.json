@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-06",
+  "executed_utc": "2026-11-06T07:08:08.416608+00:00",
+  "python": "3.14.7",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "tests": 63,
+  "skipped": 0,
+  "test_status": "passed",
+  "qt": "windows",
+  "reference_plugin": "Directionality 2.3.0",
+  "imagej": "1.54p",
+  "reference_images": 15,
+  "windows_execution": "tested",
+  "macos_execution": "not_tested",
+  "evidence": "results/windows/tests.xml; results/windows/fiji/run_manifest.json",
+  "scope": "Synthetic ground truth. No claim of accuracy on natural images. GUI evidence rendered from actual Qt/ImageJ/plugin components."
+}

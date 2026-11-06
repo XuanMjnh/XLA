@@ -1,0 +1,36 @@
+{
+  "python": "3.14.7",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "numpy": "2.5.4",
+  "seed": 2026,
+  "results": [
+    {
+      "votes": 65536,
+      "bins": 180,
+      "runs": 15,
+      "add_at_median_ms": 2.6506000012886943,
+      "bincount_median_ms": 2.5635000001784647,
+      "speedup": 1.033976985022105,
+      "max_abs_histogram_error": 1.214306433183765e-17
+    },
+    {
+      "votes": 262144,
+      "bins": 180,
+      "runs": 15,
+      "add_at_median_ms": 11.051499999666703,
+      "bincount_median_ms": 11.182299998836243,
+      "speedup": 0.9883029431169659,
+      "max_abs_histogram_error": 2.3418766925686896e-17
+    },
+    {
+      "votes": 1048576,
+      "bins": 180,
+      "runs": 15,
+      "add_at_median_ms": 45.354399999268935,
+      "bincount_median_ms": 45.78050000054645,
+      "speedup": 0.9906925437408409,
+      "max_abs_histogram_error": 4.423544863740858e-17
+    }
+  ],
+  "scope": "Microbenchmark only. Both implementations include the same input validation, linear voting, normalization and output copy, with smoothing disabled. No claim of full application or Fiji speedup."
+}

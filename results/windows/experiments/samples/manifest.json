@@ -1,0 +1,74 @@
+{
+  "license": "CC0-1.0 for generated sample images",
+  "generator": "texture/synthetic.py",
+  "description": "Procedural test images; no natural-image ground truth is claimed.",
+  "images": {
+    "stripes_000.png": {
+      "kind": "single",
+      "angle": 0
+    },
+    "stripes_015.png": {
+      "kind": "single",
+      "angle": 15
+    },
+    "stripes_030.png": {
+      "kind": "single",
+      "angle": 30
+    },
+    "stripes_045.png": {
+      "kind": "single",
+      "angle": 45
+    },
+    "stripes_060.png": {
+      "kind": "single",
+      "angle": 60
+    },
+    "stripes_090.png": {
+      "kind": "single",
+      "angle": 90
+    },
+    "stripes_120.png": {
+      "kind": "single",
+      "angle": 120
+    },
+    "stripes_150.png": {
+      "kind": "single",
+      "angle": 150
+    },
+    "stripes_179.png": {
+      "kind": "single",
+      "angle": 179
+    },
+    "stripes_030_noise015.png": {
+      "kind": "single",
+      "angle": 30,
+      "noise_sigma": 0.15,
+      "seed": 2026
+    },
+    "crossing_030_120.png": {
+      "kind": "crossing",
+      "angles": [
+        30,
+        120
+      ]
+    },
+    "white_noise.png": {
+      "kind": "noise",
+      "seed": 2026
+    },
+    "constant.png": {
+      "kind": "constant"
+    },
+    "two_regions_020_070.png": {
+      "kind": "nonstationary",
+      "angles": [
+        20,
+        70
+      ]
+    },
+    "rectangular_035.png": {
+      "kind": "single",
+      "angle": 35
+    }
+  }
+}
