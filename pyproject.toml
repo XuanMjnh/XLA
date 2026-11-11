@@ -1,0 +1,15 @@
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+extend-exclude = ["results", "data", "bao_cao", "thuyet_trinh"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+# These scripts set up the repository path or plotting backend before imports.
+"tools/*.py" = ["E402"]
+"fiji/*.py" = ["E402"]
+"tests/test_interfaces.py" = ["E402"]
+"texture/experiments.py" = ["E402"]
+"texture/export.py" = ["E402"]

@@ -26,7 +26,10 @@ env/
 /results/single/
 /results/batch/
 *.tmp
-/results/windows/document_preview/*.png
+# Regenerable document and slide previews
+/results/windows/document_preview/
+/results/windows/slides_preview/
+/thuyet_trinh/preview/
 
 # Local configuration and editor files
 .env
