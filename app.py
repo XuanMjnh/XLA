@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+z#!/usr/bin/env python3
 """TextureLab native desktop application."""
 from __future__ import annotations
 import csv
