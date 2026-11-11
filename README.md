@@ -1,8 +1,7 @@
 ﻿# TextureLab Desktop
 
 Bài tập lớn Xử lý ảnh — Nhóm 2, nhóm lớp 7. Ứng dụng phân tích hướng kết cấu
-ảnh bằng Sobel và Fourier, gồm giao diện desktop PySide6 và dòng lệnh.
-
+ảnh bằng Sobel và Fourier
 ## Chạy ứng dụng
 
 Cần Python 3.11 trở lên. Trên Windows, mở **`run_windows.bat`** để tự tạo môi
@@ -14,7 +13,6 @@ py -3 -m venv .venv
 .venv\Scripts\python.exe app.py
 ```
 
-Linux: `sh run_unix.sh`. macOS chưa được kiểm chứng.
 
 ## Chức năng
 
@@ -46,7 +44,6 @@ Bộ kiểm thử gồm 63 trường hợp. Xem thêm lệnh bằng `python cli.
 
 [Báo cáo](bao_cao/BAOCAO_BTL_XLA_NHOM_2.docx) ·
 [Slide PowerPoint](thuyet_trinh/TextureLab_Desktop.pptx) ·
-[Slide PDF](thuyet_trinh/TextureLab_Desktop.pdf)
 
 Số liệu kiểm chứng nằm trong `results/windows/`; kết luận độ chính xác giới hạn
 ở ảnh tổng hợp có nhãn. Mã nguồn dự án theo [MIT License](LICENSE.txt).
